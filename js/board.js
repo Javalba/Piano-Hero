@@ -10,31 +10,31 @@ class Board {
 
     //Piano keys eventsA
     this.assignControlsToKeys();
-    // window.addEventListener('keydown', activeKeydown);
-    // window.addEventListener("keyup", activateKeyup);
   }
 
-  addSuccessHit(hits){
+  addSuccessHit(hits) {
     this.hits = this.hits + hits;
   }
 
-  addFailureHit(hits){
+  addFailureHit(hits) {
     this.fails = this.fails + hits;
   }
 
-  addPoints(points){
+  addPoints(points) {
     this.score = this.score + points;
   }
-  substractPoints(points){
+  substractPoints(points) {
     this.score = this.score - points;
   }
 
   // CONSTRUCT BOARD  & KEYS SUCCESS/FAIL
   buildSong() {
+
+    let btnRestart = document.getElementsByClassName('score-btn-restart');
+    btnRestart[0].style.display = 'none';
     for (let i = 0; i < this.rows; i++) {
       let currentDiv = document.getElementsByClassName('sheet');
       for (let j = 0; j < this.columns; j++) {
-
         let newDiv = document.createElement("div");
         newDiv.classList.add("cell");
         newDiv.setAttribute('data-row', i);
@@ -50,26 +50,26 @@ class Board {
     points[0].addEventListener('transitionend', this.removeTransPoints);
   }
 
-  // get score() {
-  //   return this.score;
-  // }
-
   set setScore(points) {
-      this.score = points;   // validation could be checked here such as only allowing non numerical values
+    this.score = points;
   }
 
   get getScore() {
-  return this.score; }
+    return this.score;
+  }
+
+  get getPercentage() {
+    /*return (this.hits / this.song.notes.length) * 100;*/
+    return (this.score/((this.song.notes.length)*5)*100);
+  }
 
   update() {
     this.printSong();
-    // console.log('hello');
-    //console.log(this.song);
   }
 
   start() {
     if (!this.intervalId) {
-      this.intervalId = setInterval(this.update.bind(this), 400);
+      this.intervalId = setInterval(this.update.bind(this), 650);
     }
   }
 
@@ -80,21 +80,40 @@ class Board {
     }
   }
 
-  finish(){
+  finish() {
     let el = document.querySelector('.sheet');
-     //div.classList.contains("notes");
-    //el.style.display = 'none';
-    // alert("Finish");
+    let hits = document.getElementsByClassName('score-hits');
+    let failure = document.getElementsByClassName('score-failure');
+    let percentage = document.getElementsByClassName('score-percentage');
+    let btnRestart = document.getElementsByClassName('score-btn-restart');
+    hits[0].innerHTML = `Hits: ${this.hits}/${this.song.notes.length}`;
+    failure[0].innerHTML = `Failures: ${this.fails}`;
+    percentage[0].innerHTML = `Percentage: ${this.getPercentage.toFixed(1)}%`;
+    btnRestart[0].style.display = "block";
+    btnRestart[0].innerText = "Restart";
+    btnRestart[0].onclick = function() {
+      location.href = "../index.html";
+    };
+    window.removeEventListener('keydown',this.keyboardListener,true);
+    
   }
 
   assignControlsToKeys() {
-    $('body').on('keydown', function(e) {
+    window.addEventListener('keydown', this.keyboardListener.bind(this));
+  }
+
+  keyboardListener(e) {
       switch (e.keyCode) {
         case 80: // p pause
           if (this.intervalId) {
             this.stop();
+            let el = document.getElementsByClassName('score-pause');
+            el[0].innerHTML = "PAUSE";
+            //$('*').off('keyup keydown keypress');
           } else {
             this.start();
+            let el = document.getElementsByClassName('score-pause');
+            el[0].innerHTML = "";
           }
           break;
         case 65: // a
@@ -105,32 +124,25 @@ class Board {
           break;
         case 68: // d
           this.checkNote(2);
-
           break;
         case 70: //f
           this.checkNote(3);
-
           break;
         case 71: //g
           this.checkNote(4);
-
           break;
         case 72: //h
           this.checkNote(5);
-
           break;
         case 74: //j
           this.checkNote(6);
-
           break;
         case 75: //k
           this.checkNote(7);
-
           break;
         default:
       }
-    }.bind(this));
-  }
+    }
 
   /**
    * this.song.positionArray --> index of array
@@ -138,16 +150,10 @@ class Board {
    * this.song.notes --> notes of song
    * @return {[type]}
    */
-
   printSong() {
-    let element = document.querySelector(`[data-row="${this.song.tempo[this.song.positionArray]}"][data-col="${this.song.notes[this.song.positionArray]}"]`);
-    if (element) {
-      element.classList.add("notes");
-    }
-
     for (let i = this.song.positionArray; i > 0; i--) {
       let prev = document.querySelector(`[data-row="${this.song.tempo[i-1]-1}"][data-col="${this.song.notes[i-1]}"]`);
-      if (prev) prev.classList.remove("notes");
+      if (prev &&  this.song.notes[i-1] !== this.song.notes[i]) prev.classList.remove("notes");
       let next = document.querySelector(`[data-row="${this.song.tempo[i-1]}"][data-col="${this.song.notes[i-1]}"]`);
       if (next) next.classList.add('notes');
       this.song.tempo[i - 1]++;
@@ -156,8 +162,13 @@ class Board {
       this.song.tempo[this.song.positionArray]++;
       this.song.positionArray++;
     }
+    let element = document.querySelector(`[data-row="${this.song.tempo[this.song.positionArray]}"][data-col="${this.song.notes[this.song.positionArray]}"]`);
+    if (element) {
+      element.classList.add("notes");
+    }
     if (this.song.tempo[this.song.tempo.length - 1] === this.rows + 1) {
-      this.finish();}
+      this.finish();
+    }
   }
 
 
@@ -178,7 +189,6 @@ class Board {
     }
     //FAILURE
     else {
-
       let pointsDiv = document.getElementsByClassName('container-points');
       pointsDiv[0].innerHTML = "-1";
       //pointsDiv[0].classList.remove('points-failure');
@@ -186,7 +196,8 @@ class Board {
       this.substractPoints(1);
       this.addFailureHit(1);
       let scoreDiv = document.getElementById("score-counter");
-      scoreDiv.innerHTML = this.getScore  ;
+      scoreDiv.innerHTML = this.getScore;
+
     }
   }
 
@@ -211,11 +222,21 @@ const rows = 8;
 const cols = 8;
 const keys = Array.from(document.querySelectorAll('.key')); // key's array
 const val = 0;
-const songs = ["cdefgab2", "ggag2bggagcbgggecbaffecdc"];
+let song="";
+const songs = ["ggag2bggag2bggge2baffecdc","eeeeeeegcdefffffeeeeeddedgeeeeeeegcdefffffeeeeggfdc"];
+let urlParameter = window.location.search;
+let songSelected = urlParameter.split('=')[1];
 
+if(songSelected==="z"){
+  songSelected = urlParameter.split('=')[2];
+  song = new Song(songSelected);
+}
+else{
+  songSelected = parseInt(songSelected);
+  song = new Song(songs[songSelected]);
+}
 
 const keyboard = new Keyboard(keys);
-let song = new Song(songs[0]);
 const game = new Board(keyboard, song, rows, cols);
 game.buildSong();
 game.start();

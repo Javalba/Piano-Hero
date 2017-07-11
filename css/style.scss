@@ -23,18 +23,15 @@ main {
 .keyboard {
   height: 240px;
   background-color: #333;
-  padding: 51px 10px 0;
+  padding: 51px 9px 0;
   float: left;
   border-radius: 20px;
   position: relative;
 
   &-ornament {
-    /* position: absolute; */
     margin-top: -46px;
     margin-bottom: 0;
-    /* margin-left: 60px; */
     height: 23px;
-    /* width: auto; */
     border: 1px groove black;
     border-radius: 15px;
     background: rgba(255,255,255,0.1);
@@ -143,12 +140,7 @@ main {
 
 .notes {
   background-color: #257498;
-  border-radius: 13px; //   z-index: 99;
-  // position: relative;
-  // background-color: #257498;
-  // border-radius: 13px;
-  // box-shadow: 0px 0 16px 14px rgb(60, 90, 0);
-
+  border-radius: 13px;
   &-active {
     border: 1px solid yellow;
     border-radius: 14px;
@@ -156,7 +148,7 @@ main {
 
   &-success {
     transform: scale(1.3);
-    border-color: white ;
+    border-color: white;
     box-shadow: 0 0 25px 5px white;
   }
 
@@ -176,17 +168,16 @@ main {
   transition: all 0.25s ease;
 }
 
-.points{
+.points {
   font-size: 1px;
-  &-success{
-    //transition: opacity 0.25s ease-in-out;
-    // transform: scale(3);
+
+  &-success {
     transition: all 0.15s ease;
     font-size: 50px;
     color: green;
-    //toDo transition
   }
-  &-failure{
+
+  &-failure {
     transition: all 0.15s ease;
     font-size: 50px;
     color: red;
@@ -194,22 +185,58 @@ main {
 }
 
 .score {
+  font-size: 20px;
   position: absolute;
-  top: 0;
-  right: 0;
+  top: 27px;
+  right: 100px;
   padding: 15px;
   background: white;
   color: black;
   font-weight: bold;
   border-radius: 10px;
+  width: auto;
+  height: auto;
+  box-shadow: 0 0 20px 1px grey;
+  border: 1px solid black;
+
+  &-pause {
+    color: red;
+  }
+
+  &-btn-restart {
+    color: black;
+    border: 1px solid black;
+    margin-top: 15px;
+    margin-left: 21%;
+    border-radius: 10px;
+    background: url(../img/ic-restart.png) no-repeat left grey;
+  }
+
+  span {
+    font-size: 17px;
+    display: block;
+  }
+}
+
+#score-counter {
+  font-size: 20px;
+  display: inline;
+}
+
+.box{
+  text-decoration: none;
+  padding: 15px;
+  background: grey;
+  color: white;
+  font-weight: bold;
+  border-radius: 12px;
+  margin: 10px;
 }
 
 .container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  display: inline-block;
   width: 400px;
-  height: 280px;
+  height: auto;
   position: absolute;
   top: 50%;
   left: 50%;
@@ -219,15 +246,38 @@ main {
   border-radius: 15px;
 
   .start {
-    text-decoration: none;
-    padding: 15px;
-    background: grey;
-    color: white;
-    font-weight: bold;
-    border-radius: 12px;
 
     &:hover {
       background-color: #2d2d2d;
+      cursor: pointer;
     }
   }
+
+  .comboSongs{
+
+    &:hover{
+      background-color: #2d2d2d;
+    }
+  }
+
+  .createSong{
+
+    &:hover{
+      background-color: #2d2d2d;
+    }
+  }
+
+  #mySelect {
+    width: 200px;
+    padding: 5px;
+    font-size: 16px;
+    line-height: 1;
+    border: 0;
+    height: 34px;
+    -webkit-appearance: none;
+    background: url(../img/ic-arrow-down-1.png) no-repeat right grey;
+    margin: 0 auto;
+
+  }
+
 }

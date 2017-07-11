@@ -4,20 +4,37 @@
 <head>
   <meta charset="utf-8">
   <title>PROJECT</title>
-
   <!-- include source files here... -->
-
   <link rel="stylesheet" href="css/style.min.css">
-
-
   <!-- include spec files here... -->
 </head>
+
 <body>
+
   <div class="container">
-    <a class="start" href="views/main.html"> START GAME </a>
+    <h1>PIANO HERO</h1>
+    <span>Select a song:</span>
+    <div class="box comboSongs">
+      <select class="box" id="mySelect">
+      <option selected="selected">Happy Birthday</option>
+      <option>Jingle Bells</option>
+    </select>
+    </div>
+    <span>OR</span>
+    <div class="box createSong">
+      <span>Create a song: </span>
+      <input type="text" id="myCreate">
+    </div>
+    <span>( Octave Notes: C D E F G A B 2 ). Example: 'cdefgab2'</span>
+    <div class="box start" href=""> START GAME </div>
+    <a href="https://www.linkedin.com/in/javierarmero/">
+      <div>
+        Javier Armero
+      </div>
+    </a>
   </div>
 
+  <script type="text/javascript" src="js/index.js"></script>
 </body>
-
 
 </html>
